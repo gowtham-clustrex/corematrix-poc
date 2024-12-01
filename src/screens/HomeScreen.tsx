@@ -12,14 +12,17 @@ import {
 } from 'react-native';
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getTruplan, uploadTruPlan} from '../api/homePageApi';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import {pick, types} from 'react-native-document-picker';
+import PatientCard from '../components/PatientCard';
+import {RootStackParamList} from '../types/screenTypeStack';
 
-const HomeScreen: React.FC<NativeStackScreenProps<{}>> = props => {
+const HomeScreen: React.FC<
+  NativeStackScreenProps<RootStackParamList>
+> = props => {
   const tableData = [
     {Column1: 'Alice', Column2: 'test'},
     {Column1: 'Noah', Column2: 'good'},
@@ -161,44 +164,21 @@ const HomeScreen: React.FC<NativeStackScreenProps<{}>> = props => {
   };
 
   const renderRow = ({item}: {item: {Column1: string; Column2: string}}) => (
-    <View style={styles.tableRow}>
-      <Text style={styles.tableCell}>{item.Column1}</Text>
-      <View style={styles.tableCell}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 12,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              ViewPDF(1);
-            }}>
-            <MaterialCommunityIcons name="eye" size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              downloadPdf('1');
-            }}>
-            <MaterialCommunityIcons name="cloud-download" size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              uploadPDF();
-            }}>
-            <MaterialCommunityIcons name="upload" size={30} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('PatientDicom');
-            }}>
-            <MaterialCommunityIcons name="file-image" size={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    <PatientCard
+      patientName={item.Column1}
+      pdfView={() => {
+        ViewPDF(1);
+      }}
+      downloadPdf={() => {
+        downloadPdf('1');
+      }}
+      uploadPdf={() => {
+        uploadPDF();
+      }}
+      DicomImagesList={() => {
+        props.navigation.navigate('PatientDicom');
+      }}
+    />
   );
 
   return (
@@ -240,12 +220,6 @@ const HomeScreen: React.FC<NativeStackScreenProps<{}>> = props => {
           }}>
           <Text style={styles.text}>View Patient</Text>
         </TouchableOpacity>
-      </View>
-
-      {/* Table Header */}
-      <View style={styles.tableHeader}>
-        <Text style={styles.headerCell}>Column1</Text>
-        <Text style={styles.headerCell}>Actions</Text>
       </View>
 
       {/* Table Data */}

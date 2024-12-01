@@ -25,7 +25,7 @@ export const uploadTruPlan = (case_id: number | string, token: string | null) =>
 
 export const getPatientDicom = (
   case_id: number | string | null,
-  token: string,
+  token: string | null,
 ) =>
   axios
     .get(`${url}/mobile/case-details/${case_id}/anatomy`, {

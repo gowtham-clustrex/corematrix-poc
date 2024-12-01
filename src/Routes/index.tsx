@@ -8,6 +8,7 @@ import NewPatientScreen from '../screens/patient/NewPatientScreen';
 import ExistingPatientScreen from '../screens/patient/ExistingPatientScreen';
 import ViewPatientScreen from '../screens/patient/ViewPatientScreen';
 import PatientDicomImages from '../screens/patient/PatientDicomImages';
+import DummyScreen from '../screens/DummyScreen';
 
 const Routes = () => {
   const Stack = createStackNavigator();
@@ -27,6 +28,7 @@ const Routes = () => {
       <Stack.Screen name="ExistingPatient" component={ExistingPatientScreen} />
       <Stack.Screen name="ViewPatient" component={ViewPatientScreen} />
       <Stack.Screen name="PatientDicom" component={PatientDicomImages} />
+      <Stack.Screen name="TestScreen" component={DummyScreen} />
     </Stack.Navigator>
   );
 };
