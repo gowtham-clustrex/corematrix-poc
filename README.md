@@ -42,9 +42,8 @@ npm run ios
 yarn ios
 ```
 
-### For iOS
+### For Windows
 ```
-For windows ,
 Run the app in Admin access for the first time 
 ```
 
