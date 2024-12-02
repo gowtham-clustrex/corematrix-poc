@@ -12,12 +12,15 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {loginApi} from '../api/authAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {RootStackParamList} from '../types/screenTypeStack';
 
-type PropsType = NativeStackScreenProps<{}>;
+type PropsType = NativeStackScreenProps<RootStackParamList>;
 
 const LoginScreen: React.FC<PropsType> = props => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
   const [Loader, setLoader] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const LoginScreen: React.FC<PropsType> = props => {
         setLoader(false);
       }
     })();
-  }, []);
+  }, [props.navigation]);
 
   const LoginApp = useCallback(async () => {
     if (!username && !password) {
@@ -86,14 +89,25 @@ const LoginScreen: React.FC<PropsType> = props => {
       />
 
       {/* Password Input */}
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={val => setPassword(val)}
-        placeholder="Password"
-        placeholderTextColor="#888"
-        secureTextEntry
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          value={password}
+          onChangeText={val => setPassword(val)}
+          placeholder="Password"
+          placeholderTextColor="#888"
+          secureTextEntry={passwordVisible}
+        />
+        <TouchableOpacity
+          onPress={() => setPasswordVisible(!passwordVisible)}
+          style={styles.iconContainer}>
+          <Icon
+            name={passwordVisible ? 'eye-off' : 'eye'}
+            size={24}
+            color="#888"
+          />
+        </TouchableOpacity>
+      </View>
 
       {/* Login Button */}
       <TouchableOpacity style={styles.button} onPress={LoginApp}>
@@ -126,6 +140,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#fff',
     color: '#333',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 16,
+    backgroundColor: '#fff',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 12,
+    color: '#333',
+  },
+  iconContainer: {
+    paddingHorizontal: 12,
   },
   button: {
     width: '90%',

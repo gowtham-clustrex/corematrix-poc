@@ -1,9 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useLayoutEffect} from 'react';
-import {StackScreenProps} from '@react-navigation/stack';
 import WebView from 'react-native-webview';
+import {RootStackParamList} from '../types/screenTypeStack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const BaseWebView: React.FC<StackScreenProps<{}>> = props => {
+const BaseWebView: React.FC<
+  NativeStackScreenProps<RootStackParamList>
+> = props => {
   useLayoutEffect(() => {
     props.navigation.setOptions({
       // headerShown: false,
@@ -11,7 +14,7 @@ const BaseWebView: React.FC<StackScreenProps<{}>> = props => {
         ? props.route.params.title
         : 'WebView',
     });
-  }, [props.navigation]);
+  }, [props.navigation, props.route.params.title]);
   console.log(props.route.params);
 
   return (

@@ -1,4 +1,3 @@
-/* eslint-disable react/self-closing-comp */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -30,7 +29,6 @@ const HomeScreen: React.FC<
   ];
 
   const [Loader, setLoader] = useState<boolean>(false);
-
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: () => (
@@ -47,7 +45,7 @@ const HomeScreen: React.FC<
               console.log(err);
             }
           }}>
-          <Icon name="logout" size={40} />
+          <Icon name="logout" size={30} />
         </TouchableOpacity>
       ),
     });
@@ -59,8 +57,6 @@ const HomeScreen: React.FC<
         const token = await AsyncStorage.getItem('access_token');
 
         const getData = await getTruplan(id, token);
-        console.log(getData.result.blob_url);
-
         props.navigation.navigate('PdfViewer', {url: getData.result.blob_url});
       } catch (err) {
         console.error(err);
@@ -74,7 +70,6 @@ const HomeScreen: React.FC<
       setLoader(true);
       const token = await AsyncStorage.getItem('access_token');
       const ApiResponse = await uploadTruPlan('49', token);
-      console.log(ApiResponse);
       const url = ApiResponse.result.blob_url;
       const PdfFile = await pick({
         allowMultiSelection: false,
@@ -118,7 +113,7 @@ const HomeScreen: React.FC<
   }, []);
 
   const DownloadFile = async (url: string) => {
-    const fileName = 'example.pdf';
+    const fileName = 'TruPlan.pdf';
     const dirs = ReactNativeBlobUtil.fs.dirs;
     const filePath = `${dirs.DownloadDir}/${fileName}`;
 
@@ -137,19 +132,11 @@ const HomeScreen: React.FC<
           mediaScannable: true,
         },
       })
-        .fetch(
-          'GET',
-          encodeURI(
-            'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-          ), // Use the passed URL
-          {
-            'x-ms-blob-type': 'BlockBlob',
-            'Content-Type': 'application/pdf',
-          },
-        )
+        .fetch('GET', url, {
+          'x-ms-blob-type': 'BlockBlob',
+          'Content-Type': 'application/pdf',
+        })
         .then(async res => {
-          console.log('base', await res.base64());
-
           Alert.alert('Success', `File downloaded to ${filePath}`);
           console.log('File path:', res.path());
         })
@@ -167,10 +154,10 @@ const HomeScreen: React.FC<
     <PatientCard
       patientName={item.Column1}
       pdfView={() => {
-        ViewPDF(1);
+        ViewPDF(49);
       }}
       downloadPdf={() => {
-        downloadPdf('1');
+        downloadPdf('49');
       }}
       uploadPdf={() => {
         uploadPDF();
